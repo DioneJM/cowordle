@@ -1,11 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
+import { MAX_GUESSES, WORD_LENGTH } from './CoWordle'
 
 export interface BoardProps {
-  dimensions: {
-    width: number,
-    height: number
-  }
+  guesses: string[]
 }
 
 const BoardWrapper = styled.div`
@@ -15,16 +13,26 @@ const BoardWrapper = styled.div`
   align-items: center;
 `
 
-const Board = ({ dimensions }: BoardProps) => {
+const Board = ({ guesses }: BoardProps) => {
+  const guessesRemaining = MAX_GUESSES - guesses.length
   return <BoardWrapper>
-    {Array.from(Array(dimensions.height).keys()).filter(row => row != undefined).map((row) => {
-      return <Row key={row} isFirst={row === 0}>
-        {Array.from(Array(dimensions.width).keys()).filter(column => column != undefined).map((column) => (
-          <Block key={`${row},${column}`} isFirst={column === 0}>{`${row},${column}`}</Block>
+    {guesses.map((guess, index) => {
+      return <Row key={index} isFirst={index === 0}>
+        {guess.split('').map((guess, index) => (
+          <Block key={`${index}-${guess}`} isFirst={index === 0}>{guess.toUpperCase()}</Block>
         ))}
         <br />
       </Row>
     })}
+    {Array.from(Array(guessesRemaining).keys()).map((_, index) => {
+      return <Row key={index} isFirst={index === 0}>
+        {Array.from(Array(WORD_LENGTH).keys()).map((guess, index) => (
+          <EmptyBlock key={`${index}_empty`} isFirst={index === 0} />
+        ))}
+        <br />
+      </Row>
+    })}
+
   </BoardWrapper>
 }
 
@@ -43,6 +51,10 @@ const Block = styled.div<{ isFirst: boolean }>`
   align-items: center;
   justify-content: center;
   margin-left: ${({ isFirst }) => isFirst ? '0' : '4'}px;
+  font-weight: 800;
+  font-size: 2rem;
 `
+
+const EmptyBlock = styled(Block)``
 
 export default Board

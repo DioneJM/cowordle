@@ -4,6 +4,9 @@ import Board from './Board'
 import Keyboard from './Keyboard/Keyboard'
 import styled from 'styled-components'
 
+export const MAX_GUESSES = 6
+export const WORD_LENGTH = 5
+
 const Wrapper = styled.div`
   background-color: rgb(18, 18, 19);
   height: 100vh;
@@ -20,17 +23,27 @@ const Content = styled.div`
   flex-direction: column;
   align-items: center;
   padding-top: 1rem;
+  //justify-content: space-between;
+`
+
+const KeyboardWrapper = styled.div`
+  position: fixed;
+  bottom: 0;
 `
 
 const CoWordle = () => {
+  const guesses = [
+    'pilot',
+  ]
   return <Wrapper>
     <Header />
     <Content>
-      <Board dimensions={{
-        width: 5,
-        height: 5,
-      }} />
-      <Keyboard />
+      <Board guesses={guesses} />
+      <KeyboardWrapper>
+        <Keyboard onClick={(letter) => console.log(`${letter} clicked`)}
+                  onDelete={() => console.log('delete clicked')}
+                  onSubmit={() => console.log('submit clicked')} />
+      </KeyboardWrapper>
     </Content>
   </Wrapper>
 }
