@@ -16,6 +16,13 @@
     "window": "readonly"
   },
   "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
     "plugin:react/recommended"
+  ],
+  "plugins": [
+    "react",
+    "@typescript-eslint"
   ]
 }
