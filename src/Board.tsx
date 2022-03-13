@@ -17,9 +17,13 @@ const Board = ({ guesses }: BoardProps) => {
   const guessesRemaining = MAX_GUESSES - guesses.length
   return <BoardWrapper>
     {guesses.map((guess, index) => {
+      const freeCharacters = WORD_LENGTH - guess.length
       return <Row key={index} isFirst={index === 0}>
-        {guess.split('').map((guess, index) => (
-          <Block key={`${index}-${guess}`} isFirst={index === 0}>{guess.toUpperCase()}</Block>
+        {guess.split('').map((guess, guessIndex) => (
+          <Block key={`${index}-${guessIndex}-${guess}`} isFirst={guessIndex === 0}>{guess.toUpperCase()}</Block>
+        ))}
+        {Array.from(Array(freeCharacters).keys()).map((_, freeIndex) => (
+          <EmptyBlock key={`${index}_${freeIndex}_guess_empty`} isFirst={freeIndex === 0} />
         ))}
         <br />
       </Row>
@@ -38,12 +42,13 @@ const Board = ({ guesses }: BoardProps) => {
 
 const Row = styled.div<{ isFirst: boolean }>`
   display: flex;
+  //justify-content: space-between;
   margin-top: ${({ isFirst }) => isFirst ? '0' : '4'}px;
 `
 
 const Block = styled.div<{ isFirst: boolean }>`
-  width: 62px;
-  height: 62px;
+  min-width: 64px;
+  min-height: 64px;
   border: 2px solid rgb(58, 58, 60);
   color: white;
   display: flex;

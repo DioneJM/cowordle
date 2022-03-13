@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Header from './Header'
 import Board from './Board'
 import Keyboard from './Keyboard/Keyboard'
@@ -23,7 +23,6 @@ const Content = styled.div`
   flex-direction: column;
   align-items: center;
   padding-top: 1rem;
-  //justify-content: space-between;
 `
 
 const KeyboardWrapper = styled.div`
@@ -32,17 +31,40 @@ const KeyboardWrapper = styled.div`
 `
 
 const CoWordle = () => {
-  const guesses = [
-    'pilot',
-  ]
+  const [currentGuessAttempt, setCurrentGuessAttempt] = useState(0)
+  const [currentGuess, setCurrentGuess] = useState<string>('')
+  const [guesses, setGuesses] = useState<string[]>([])
+
+  useEffect(() => {
+    if (currentGuessAttempt === MAX_GUESSES) {
+      console.log('no more guesses remaining :(')
+      return
+    }
+    setCurrentGuess('')
+  }, [currentGuessAttempt])
+
+  useEffect(() => {
+    setGuesses(guesses => {
+      const newGuesses = [...guesses]
+      newGuesses[currentGuessAttempt] = currentGuess
+      return [...newGuesses]
+    })
+  }, [currentGuess])
+
   return <Wrapper>
     <Header />
     <Content>
       <Board guesses={guesses} />
       <KeyboardWrapper>
-        <Keyboard onClick={(letter) => console.log(`${letter} clicked`)}
-                  onDelete={() => console.log('delete clicked')}
-                  onSubmit={() => console.log('submit clicked')} />
+        <Keyboard onClick={(letter) => setCurrentGuess(currentGuess => {
+          if (currentGuess.length < WORD_LENGTH) {
+            return currentGuess + letter
+          } else {
+            return currentGuess
+          }
+        })}
+                  onDelete={() => setCurrentGuess(currentGuess => currentGuess.slice(0, -1))}
+                  onSubmit={() => setCurrentGuessAttempt(currentGuessAttempt => currentGuessAttempt + 1)} />
       </KeyboardWrapper>
     </Content>
   </Wrapper>
