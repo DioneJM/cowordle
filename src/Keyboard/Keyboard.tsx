@@ -1,10 +1,7 @@
 import React from 'react'
 
 
-export interface KeyboardProps {
-}
-
-const Keyboard = ({}: KeyboardProps) => {
+const Keyboard = () => {
   return <div />
 }
 

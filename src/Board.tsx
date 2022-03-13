@@ -1,10 +1,7 @@
 import React from 'react'
 
 
-export interface BoardProps {
-}
-
-const Board = ({}: BoardProps) => {
+const Board = () => {
   return <div />
 }
 
