@@ -44,6 +44,9 @@ const CoWordle = () => {
   }, [currentGuessAttempt])
 
   useEffect(() => {
+    if (currentGuessAttempt >= MAX_GUESSES) {
+      return
+    }
     setGuesses(guesses => {
       const newGuesses = [...guesses]
       newGuesses[currentGuessAttempt] = currentGuess
@@ -63,8 +66,9 @@ const CoWordle = () => {
             return currentGuess
           }
         })}
-                  onDelete={() => setCurrentGuess(currentGuess => currentGuess.slice(0, -1))}
-                  onSubmit={() => setCurrentGuessAttempt(currentGuessAttempt => currentGuessAttempt + 1)} />
+                  onDelete={() => setCurrentGuess(currentGuess => currentGuess && currentGuess.slice(0, -1))}
+                  onSubmit={() => setCurrentGuessAttempt(currentGuessAttempt =>
+                    currentGuessAttempt < MAX_GUESSES ? currentGuessAttempt + 1 : currentGuessAttempt)} />
       </KeyboardWrapper>
     </Content>
   </Wrapper>

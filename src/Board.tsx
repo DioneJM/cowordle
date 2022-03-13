@@ -14,9 +14,9 @@ const BoardWrapper = styled.div`
 `
 
 const Board = ({ guesses }: BoardProps) => {
-  const guessesRemaining = MAX_GUESSES - guesses.length
+  const guessesRemaining = MAX_GUESSES - guesses?.length ?? MAX_GUESSES
   return <BoardWrapper>
-    {guesses.map((guess, index) => {
+    {guesses?.map((guess, index) => {
       const freeCharacters = WORD_LENGTH - guess.length
       return <Row key={index} isFirst={index === 0}>
         {guess.split('').map((guess, guessIndex) => (
@@ -29,7 +29,7 @@ const Board = ({ guesses }: BoardProps) => {
       </Row>
     })}
     {Array.from(Array(guessesRemaining).keys()).map((_, index) => {
-      return <Row key={index} isFirst={index === 0}>
+      return <Row key={index} isFirst={guesses.length === 0}>
         {Array.from(Array(WORD_LENGTH).keys()).map((guess, index) => (
           <EmptyBlock key={`${index}_empty`} isFirst={index === 0} />
         ))}
@@ -42,7 +42,7 @@ const Board = ({ guesses }: BoardProps) => {
 
 const Row = styled.div<{ isFirst: boolean }>`
   display: flex;
-  //justify-content: space-between;
+  justify-content: space-between;
   margin-top: ${({ isFirst }) => isFirst ? '0' : '4'}px;
 `
 

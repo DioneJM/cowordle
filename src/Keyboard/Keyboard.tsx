@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
+import { debounce } from 'lodash'
 
 const KeyboardWrapper = styled.div`
 `
@@ -10,6 +11,9 @@ const keyboardLayout = [
   ['Enter', 'z', 'x', 'c', 'v', 'b', 'n', 'm', 'Delete'],
 ]
 
+const alphabet = 'abcdefghijklmnopqrstuvwxyz'
+const modifiersToIgnore = ['Alt', 'Ctrl', 'Meta']
+
 export interface KeyboardProps {
   onClick: (letter: string) => void;
   onDelete: () => void;
@@ -17,6 +21,28 @@ export interface KeyboardProps {
 }
 
 const Keyboard = ({ onClick, onDelete, onSubmit }: KeyboardProps) => {
+  const processKeyDown = debounce((keyEvent: KeyboardEvent) => {
+    const keyName = keyEvent.key
+    const modifierPressed = modifiersToIgnore.some(modifier => keyEvent.getModifierState(modifier))
+    if (modifierPressed) {
+      return
+    }
+    if (keyName === 'Backspace') {
+      onDelete()
+    } else if (keyName === 'Enter') {
+      onSubmit()
+    } else if (alphabet.includes(keyName.toLowerCase())) {
+      onClick(keyName.toLowerCase())
+    }
+  }, 1)
+
+  useEffect(() => {
+    document.addEventListener('keydown', (event) => processKeyDown(event))
+
+    return () => {
+      document.removeEventListener('keydown', processKeyDown)
+    }
+  }, [])
   return <KeyboardWrapper>
     {keyboardLayout.map((row, index) => (
       <KeyRow key={index} offsetRow={index === 1}>
