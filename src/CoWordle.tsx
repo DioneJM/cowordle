@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Header from './Header'
 import Board from './Board'
 import Keyboard from './Keyboard/Keyboard'
@@ -33,6 +33,7 @@ const KeyboardWrapper = styled.div`
 const CoWordle = () => {
   const [currentGuessAttempt, setCurrentGuessAttempt] = useState(0)
   const [currentGuess, setCurrentGuess] = useState<string>('')
+  const currentGuessRef = useRef<string>(currentGuess)
   const [guesses, setGuesses] = useState<string[]>([])
 
   useEffect(() => {
@@ -54,21 +55,32 @@ const CoWordle = () => {
     })
   }, [currentGuess])
 
+  const submitGuess = () => {
+    if (currentGuessRef.current.length < WORD_LENGTH) {
+      return
+    }
+    setCurrentGuessAttempt(currentGuessAttempt =>
+      currentGuessAttempt < MAX_GUESSES ? currentGuessAttempt + 1 : currentGuessAttempt)
+  }
+
+
   return <Wrapper>
     <Header />
     <Content>
       <Board guesses={guesses} />
       <KeyboardWrapper>
-        <Keyboard onClick={(letter) => setCurrentGuess(currentGuess => {
-          if (currentGuess.length < WORD_LENGTH) {
-            return currentGuess + letter
-          } else {
-            return currentGuess
-          }
-        })}
-                  onDelete={() => setCurrentGuess(currentGuess => currentGuess && currentGuess.slice(0, -1))}
-                  onSubmit={() => setCurrentGuessAttempt(currentGuessAttempt =>
-                    currentGuessAttempt < MAX_GUESSES ? currentGuessAttempt + 1 : currentGuessAttempt)} />
+        <Keyboard
+          onClick={(letter) => {
+            setCurrentGuess(currentGuess => {
+              const newGuess = currentGuess.length < WORD_LENGTH ?
+                currentGuess + letter :
+                currentGuess
+              currentGuessRef.current = newGuess
+              return newGuess
+            })
+          }}
+          onDelete={() => setCurrentGuess(currentGuess => currentGuess.slice(0, -1))}
+          onSubmit={submitGuess} />
       </KeyboardWrapper>
     </Content>
   </Wrapper>
