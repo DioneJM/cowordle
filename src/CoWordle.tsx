@@ -32,6 +32,7 @@ const KeyboardWrapper = styled.div`
 
 const CoWordle = () => {
   const [currentGuessAttempt, setCurrentGuessAttempt] = useState(0)
+  const currentGuessAttemptRef = useRef<number>(currentGuessAttempt)
   const [currentGuess, setCurrentGuess] = useState<string>('')
   const currentGuessRef = useRef<string>(currentGuess)
   const [guesses, setGuesses] = useState<string[]>([])
@@ -39,7 +40,9 @@ const CoWordle = () => {
   const wordToGuess = 'pilot'
 
   useEffect(() => {
-    if (currentGuessAttempt === MAX_GUESSES && currentGuessRef.current !== wordToGuess) {
+    console.log(currentGuessAttemptRef.current)
+    if (currentGuessAttemptRef.current === MAX_GUESSES && currentGuessRef.current !== wordToGuess) {
+      setBoardState(BoardState.Unsuccessful)
       return
     }
     setCurrentGuess('')
@@ -67,7 +70,9 @@ const CoWordle = () => {
       setBoardState(BoardState.Successful)
     }
     setCurrentGuessAttempt(currentGuessAttempt => {
-      return currentGuessAttempt < MAX_GUESSES ? currentGuessAttempt + 1 : currentGuessAttempt
+      const nextGuessAttempt = currentGuessAttempt < MAX_GUESSES ? currentGuessAttempt + 1 : currentGuessAttempt
+      currentGuessAttemptRef.current = nextGuessAttempt
+      return nextGuessAttempt
     })
   }
 
