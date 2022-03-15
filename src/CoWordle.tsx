@@ -42,6 +42,7 @@ const CoWordle = () => {
       return
     }
     setCurrentGuess('')
+    currentGuessRef.current = ''
   }, [currentGuessAttempt])
 
   useEffect(() => {
