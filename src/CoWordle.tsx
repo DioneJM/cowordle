@@ -41,6 +41,7 @@ const CoWordle = () => {
    */
   const currentGuessAttemptRef = useRef<number>(currentGuessAttempt)
   const currentGuessRef = useRef<string>(currentGuess)
+  const boardStateRef = useRef<BoardState>(BoardState.Playing)
 
   const [guesses, setGuesses] = useState<string[]>([])
   const [boardState, setBoardState] = useState<BoardState>(BoardState.Playing)
@@ -50,6 +51,7 @@ const CoWordle = () => {
     console.log(currentGuessAttemptRef.current)
     if (currentGuessAttemptRef.current === MAX_GUESSES && currentGuessRef.current !== wordToGuess) {
       setBoardState(BoardState.Unsuccessful)
+      boardStateRef.current = BoardState.Unsuccessful
       return
     }
     setCurrentGuess('')
@@ -57,7 +59,7 @@ const CoWordle = () => {
   }, [currentGuessAttempt])
 
   useEffect(() => {
-    if (currentGuessAttempt >= MAX_GUESSES) {
+    if (currentGuessAttempt >= MAX_GUESSES || boardStateRef.current === BoardState.Successful || boardStateRef.current === BoardState.Unsuccessful) {
       return
     }
     setGuesses(guesses => {
@@ -69,14 +71,18 @@ const CoWordle = () => {
 
   const submitGuess = () => {
     if (currentGuessRef.current.length < WORD_LENGTH ||
-      boardState === BoardState.Successful ||
-      boardState === BoardState.Unsuccessful) {
+      boardStateRef.current === BoardState.Successful ||
+      boardStateRef.current === BoardState.Unsuccessful) {
       return
     }
     if (currentGuessRef.current === wordToGuess) {
       setBoardState(BoardState.Successful)
+      boardStateRef.current = BoardState.Successful
     }
     setCurrentGuessAttempt(currentGuessAttempt => {
+      if (boardStateRef.current !== BoardState.Playing) {
+        return currentGuessAttempt
+      }
       const nextGuessAttempt = currentGuessAttempt < MAX_GUESSES ? currentGuessAttempt + 1 : currentGuessAttempt
       currentGuessAttemptRef.current = nextGuessAttempt
       return nextGuessAttempt
