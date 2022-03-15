@@ -47,8 +47,8 @@ const Row = styled.div<{ isFirst: boolean }>`
 `
 
 const Block = styled.div<{ isFirst: boolean }>`
-  min-width: 64px;
-  min-height: 64px;
+  min-width: 3rem;
+  min-height: 3rem;
   border: 2px solid rgb(58, 58, 60);
   color: white;
   display: flex;
