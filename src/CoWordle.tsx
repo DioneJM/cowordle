@@ -31,10 +31,17 @@ const KeyboardWrapper = styled.div`
 `
 
 const CoWordle = () => {
+  // TODO remove this and solely use the refs below instead
   const [currentGuessAttempt, setCurrentGuessAttempt] = useState(0)
-  const currentGuessAttemptRef = useRef<number>(currentGuessAttempt)
   const [currentGuess, setCurrentGuess] = useState<string>('')
+
+  /**
+   * These refs are needed as they can be updated from the event listeners from Keyboard
+   * used to listen in on a user's key press
+   */
+  const currentGuessAttemptRef = useRef<number>(currentGuessAttempt)
   const currentGuessRef = useRef<string>(currentGuess)
+
   const [guesses, setGuesses] = useState<string[]>([])
   const [boardState, setBoardState] = useState<BoardState>(BoardState.Playing)
   const wordToGuess = 'pilot'
