@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Header from './Header'
-import Board from './Board'
+import Board, { BoardState } from './Board'
 import Keyboard from './Keyboard/Keyboard'
 import styled from 'styled-components'
 
@@ -35,10 +35,11 @@ const CoWordle = () => {
   const [currentGuess, setCurrentGuess] = useState<string>('')
   const currentGuessRef = useRef<string>(currentGuess)
   const [guesses, setGuesses] = useState<string[]>([])
+  const [boardState, setBoardState] = useState<BoardState>(BoardState.Playing)
+  const wordToGuess = 'pilot'
 
   useEffect(() => {
-    if (currentGuessAttempt === MAX_GUESSES) {
-      console.log('no more guesses remaining :(')
+    if (currentGuessAttempt === MAX_GUESSES && currentGuessRef.current !== wordToGuess) {
       return
     }
     setCurrentGuess('')
@@ -57,18 +58,24 @@ const CoWordle = () => {
   }, [currentGuess])
 
   const submitGuess = () => {
-    if (currentGuessRef.current.length < WORD_LENGTH) {
+    if (currentGuessRef.current.length < WORD_LENGTH ||
+      boardState === BoardState.Successful ||
+      boardState === BoardState.Unsuccessful) {
       return
     }
-    setCurrentGuessAttempt(currentGuessAttempt =>
-      currentGuessAttempt < MAX_GUESSES ? currentGuessAttempt + 1 : currentGuessAttempt)
+    if (currentGuessRef.current === wordToGuess) {
+      setBoardState(BoardState.Successful)
+    }
+    setCurrentGuessAttempt(currentGuessAttempt => {
+      return currentGuessAttempt < MAX_GUESSES ? currentGuessAttempt + 1 : currentGuessAttempt
+    })
   }
 
 
   return <Wrapper>
     <Header />
     <Content>
-      <Board guesses={guesses} />
+      <Board guesses={guesses} boardState={boardState} />
       <KeyboardWrapper>
         <Keyboard
           onClick={(letter) => {
