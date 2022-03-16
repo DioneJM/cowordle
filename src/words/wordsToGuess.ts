@@ -1,4 +1,4 @@
-export const words = [
+export const wordsToGuess = [
   'being',
   'doing',
   'going',

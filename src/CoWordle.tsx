@@ -3,7 +3,7 @@ import Header from './Header'
 import Board, { BoardState } from './Board'
 import Keyboard from './Keyboard/Keyboard'
 import styled from 'styled-components'
-import { words } from './words/words'
+import { wordsToGuess } from './words/wordsToGuess'
 
 export const MAX_GUESSES = 6
 export const WORD_LENGTH = 5
@@ -45,8 +45,8 @@ const dateDiffInDays = (date1: Date, date2: Date): number => {
 const getDaysSinceEpochFrom = (date: Date) => dateDiffInDays(cowordleEpochDate, date)
 const today = new Date()
 const daysSinceEpoch: number = getDaysSinceEpochFrom(today)
-const circularIndex = (daysSinceEpoch % words.length + words.length) % words.length
-const wordToGuess = words[circularIndex - 1]
+const circularIndex = (daysSinceEpoch % wordsToGuess.length + wordsToGuess.length) % wordsToGuess.length
+const wordToGuess = wordsToGuess[circularIndex - 1]
 console.log('word to guess: ', wordToGuess)
 
 const CoWordle = () => {

@@ -11,7 +11,8 @@ export enum BoardState {
 export enum LetterState {
   NotPresent,
   InTheWord,
-  Correct
+  Correct,
+  Blank
 }
 
 export interface BoardProps {
@@ -56,6 +57,7 @@ const getColorForLetterState = (letterState: LetterState) => {
     case LetterState.InTheWord:
       return 'rgb(181, 159, 59)'
     case LetterState.NotPresent:
+      return 'rgb(58, 58, 60)'
     default:
       return 'rgb(18, 18, 19)'
   }
@@ -81,7 +83,7 @@ const Board = ({ guesses, boardState, wordToGuess }: BoardProps) => {
         {Array.from(Array(freeCharacters).keys()).map((_, freeIndex) => (
           <EmptyBlock key={`${index}_${freeIndex}_guess_empty`}
                       isFirst={freeIndex === 0}
-                      letterState={LetterState.NotPresent}
+                      letterState={LetterState.Blank}
           />
         ))}
         <br />
@@ -92,7 +94,7 @@ const Board = ({ guesses, boardState, wordToGuess }: BoardProps) => {
         {Array.from(Array(WORD_LENGTH).keys()).map((guess, index) => (
           <EmptyBlock key={`${index}_empty`}
                       isFirst={index === 0}
-                      letterState={LetterState.NotPresent}
+                      letterState={LetterState.Blank}
           />
         ))}
         <br />
