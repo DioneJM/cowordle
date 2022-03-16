@@ -31,7 +31,6 @@ const KeyboardWrapper = styled.div`
 `
 
 const CoWordle = () => {
-  // TODO remove this and solely use the refs below instead
   const [currentGuessAttempt, setCurrentGuessAttempt] = useState(0)
   const [currentGuess, setCurrentGuess] = useState<string>('')
 
