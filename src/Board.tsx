@@ -71,7 +71,7 @@ const Board = ({ guesses, boardState, wordToGuess }: BoardProps) => {
       const isLatestGuess = index === guesses.length - 1
       return <Row key={index} isFirst={index === 0}>
         {guess.split('').map((letter, guessIndex) => (
-          <Block key={`${index}-${guessIndex}-${letter}`} isFirst={guessIndex === 0}
+          <Block key={`${index}-${guessIndex}-${letter}`}
                  letterState={isLatestGuess && boardState !== BoardState.Successful ?
                    LetterState.NotPresent :
                    getLetterState(letter, guessIndex, wordToGuess)
@@ -82,7 +82,6 @@ const Board = ({ guesses, boardState, wordToGuess }: BoardProps) => {
         ))}
         {Array.from(Array(freeCharacters).keys()).map((_, freeIndex) => (
           <EmptyBlock key={`${index}_${freeIndex}_guess_empty`}
-                      isFirst={freeIndex === 0}
                       letterState={LetterState.Blank}
           />
         ))}
@@ -93,7 +92,6 @@ const Board = ({ guesses, boardState, wordToGuess }: BoardProps) => {
       return <Row key={index} isFirst={guesses.length === 0}>
         {Array.from(Array(WORD_LENGTH).keys()).map((guess, index) => (
           <EmptyBlock key={`${index}_empty`}
-                      isFirst={index === 0}
                       letterState={LetterState.Blank}
           />
         ))}
@@ -110,7 +108,7 @@ const Row = styled.div<{ isFirst: boolean }>`
   margin-top: ${({ isFirst }) => isFirst ? '0' : '4'}px;
 `
 
-const Block = styled.div<{ isFirst: boolean, letterState: LetterState }>`
+const Block = styled.div<{ letterState: LetterState }>`
   min-width: 3rem;
   min-height: 3rem;
   border: 2px solid rgb(58, 58, 60);
@@ -120,7 +118,7 @@ const Block = styled.div<{ isFirst: boolean, letterState: LetterState }>`
   text-align: center;
   align-items: center;
   justify-content: center;
-  margin-left: ${({ isFirst }) => isFirst ? '0' : '4'}px;
+  margin-left: 4px;
   font-weight: 800;
   font-size: 2rem;
 `
