@@ -40,7 +40,7 @@ const getColorFromBoardState = (boardState: BoardState): string => {
   }
 }
 
-const getLetterState = (letter: string, position: number, wordToGuess: string) => {
+export const getLetterState = (letter: string, position: number, wordToGuess: string) => {
   if (wordToGuess[position] === letter) {
     return LetterState.Correct
   } else if (wordToGuess.includes(letter)) {

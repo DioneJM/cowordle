@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Header from './Header'
-import Board, { BoardState } from './Board'
+import Board, { BoardState, getLetterState, LetterState } from './Board'
 import Keyboard from './Keyboard/Keyboard'
 import styled from 'styled-components'
 import { wordsToGuess } from './words/wordsToGuess'
@@ -49,6 +49,11 @@ const circularIndex = (daysSinceEpoch % wordsToGuess.length + wordsToGuess.lengt
 const wordToGuess = wordsToGuess[circularIndex - 1]
 console.log('word to guess: ', wordToGuess)
 
+export interface Letter {
+  letter: string,
+  letterState: LetterState
+}
+
 const CoWordle = () => {
   const [currentGuessAttempt, setCurrentGuessAttempt] = useState(0)
   const [currentGuess, setCurrentGuess] = useState<string>('')
@@ -65,7 +70,6 @@ const CoWordle = () => {
   const [boardState, setBoardState] = useState<BoardState>(BoardState.Playing)
 
   useEffect(() => {
-    console.log(currentGuessAttemptRef.current)
     if (currentGuessAttemptRef.current === MAX_GUESSES && currentGuessRef.current !== wordToGuess) {
       setBoardState(BoardState.Unsuccessful)
       boardStateRef.current = BoardState.Unsuccessful
@@ -85,6 +89,26 @@ const CoWordle = () => {
       return [...newGuesses]
     })
   }, [currentGuess])
+
+  const [knownLetters, updateKnownLetters] = useState<Letter[]>([])
+
+  useEffect(() => {
+    const known: Letter[] = guesses
+      .map((guess) => {
+        const letters = guess.split('')
+        return letters.map((letter, letterIndex) => {
+          return {
+            letter,
+            letterState: getLetterState(letter, letterIndex, wordToGuess),
+          }
+        })
+          .filter(letter => letter.letterState !== LetterState.NotPresent && letter.letterState !== LetterState.Blank)
+      })
+      .reduce((all, current) => [...all, ...current], [])
+      .filter((letter, index, knownLetters) => knownLetters.findIndex(l => (l.letter === letter.letter)) === index)
+
+    updateKnownLetters(known)
+  }, [guesses])
 
   const submitGuess = () => {
     if (currentGuessRef.current.length < WORD_LENGTH ||
