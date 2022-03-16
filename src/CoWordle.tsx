@@ -104,7 +104,11 @@ const CoWordle = () => {
               return newGuess
             })
           }}
-          onDelete={() => setCurrentGuess(currentGuess => currentGuess.slice(0, -1))}
+          onDelete={() => setCurrentGuess(currentGuess => {
+            const newGuess = currentGuess.slice(0, -1)
+            currentGuessRef.current = newGuess
+            return newGuess
+          })}
           onSubmit={submitGuess} />
       </KeyboardWrapper>
     </Content>
