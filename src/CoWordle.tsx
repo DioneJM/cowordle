@@ -43,15 +43,15 @@ const dateDiffInDays = (date1: Date, date2: Date): number => {
 }
 
 const getDaysSinceEpochFrom = (date: Date) => dateDiffInDays(cowordleEpochDate, date)
+const today = new Date()
+const daysSinceEpoch: number = getDaysSinceEpochFrom(today)
+const circularIndex = (daysSinceEpoch % words.length + words.length) % words.length
+const wordToGuess = words[circularIndex - 1]
+console.log('word to guess: ', wordToGuess)
 
 const CoWordle = () => {
   const [currentGuessAttempt, setCurrentGuessAttempt] = useState(0)
   const [currentGuess, setCurrentGuess] = useState<string>('')
-  const today = new Date()
-  const daysSinceEpoch: number = getDaysSinceEpochFrom(today)
-  const circularIndex = (daysSinceEpoch % words.length + words.length) % words.length
-  const wordToGuess = words[circularIndex - 1]
-  console.log('word to guess: ', wordToGuess)
 
   /**
    * These refs are needed as they can be updated from the event listeners from Keyboard
