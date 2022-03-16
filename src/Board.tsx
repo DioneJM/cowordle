@@ -8,9 +8,16 @@ export enum BoardState {
   Unsuccessful
 }
 
+export enum LetterState {
+  NotPresent,
+  InTheWord,
+  Correct
+}
+
 export interface BoardProps {
   guesses: string[]
   boardState: BoardState;
+  wordToGuess: string;
 }
 
 const BoardWrapper = styled.div`
@@ -32,23 +39,49 @@ const getColorFromBoardState = (boardState: BoardState): string => {
   }
 }
 
-const Board = ({ guesses, boardState }: BoardProps) => {
+const getLetterState = (letter: string, position: number, wordToGuess: string) => {
+  if (wordToGuess[position] === letter) {
+    return LetterState.Correct
+  } else if (wordToGuess.includes(letter)) {
+    return LetterState.InTheWord
+  } else {
+    return LetterState.NotPresent
+  }
+}
+
+const getColorForLetterState = (letterState: LetterState) => {
+  switch (letterState) {
+    case LetterState.Correct:
+      return 'rgb(83, 141, 78)'
+    case LetterState.InTheWord:
+      return 'rgb(181, 159, 59)'
+    case LetterState.NotPresent:
+    default:
+      return 'rgb(18, 18, 19)'
+  }
+}
+
+const Board = ({ guesses, boardState, wordToGuess }: BoardProps) => {
   const guessesRemaining = MAX_GUESSES - guesses?.length ?? MAX_GUESSES
   return <BoardWrapper>
     {guesses?.map((guess, index) => {
       const freeCharacters = WORD_LENGTH - guess.length
       const isLatestGuess = index === guesses.length - 1
       return <Row key={index} isFirst={index === 0}>
-        {guess.split('').map((guess, guessIndex) => (
-          <Block key={`${index}-${guessIndex}-${guess}`} isFirst={guessIndex === 0}
-                 boardState={isLatestGuess ? boardState : BoardState.Playing}>
-            {guess.toUpperCase()}
+        {guess.split('').map((letter, guessIndex) => (
+          <Block key={`${index}-${guessIndex}-${letter}`} isFirst={guessIndex === 0}
+                 letterState={isLatestGuess && boardState !== BoardState.Successful ?
+                   LetterState.NotPresent :
+                   getLetterState(letter, guessIndex, wordToGuess)
+                 }
+          >
+            {letter.toUpperCase()}
           </Block>
         ))}
         {Array.from(Array(freeCharacters).keys()).map((_, freeIndex) => (
           <EmptyBlock key={`${index}_${freeIndex}_guess_empty`}
                       isFirst={freeIndex === 0}
-                      boardState={boardState}
+                      letterState={LetterState.NotPresent}
           />
         ))}
         <br />
@@ -59,7 +92,7 @@ const Board = ({ guesses, boardState }: BoardProps) => {
         {Array.from(Array(WORD_LENGTH).keys()).map((guess, index) => (
           <EmptyBlock key={`${index}_empty`}
                       isFirst={index === 0}
-                      boardState={boardState}
+                      letterState={LetterState.NotPresent}
           />
         ))}
         <br />
@@ -75,11 +108,12 @@ const Row = styled.div<{ isFirst: boolean }>`
   margin-top: ${({ isFirst }) => isFirst ? '0' : '4'}px;
 `
 
-const Block = styled.div<{ isFirst: boolean, boardState: BoardState }>`
+const Block = styled.div<{ isFirst: boolean, letterState: LetterState }>`
   min-width: 3rem;
   min-height: 3rem;
   border: 2px solid rgb(58, 58, 60);
-  color: ${({ boardState }) => getColorFromBoardState(boardState)};
+  background-color: ${({ letterState }) => getColorForLetterState(letterState)};
+  color: white;
   display: flex;
   text-align: center;
   align-items: center;

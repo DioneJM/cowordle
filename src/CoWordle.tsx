@@ -110,7 +110,7 @@ const CoWordle = () => {
   return <Wrapper>
     <Header />
     <Content>
-      <Board guesses={guesses} boardState={boardState} />
+      <Board guesses={guesses} boardState={boardState} wordToGuess={wordToGuess} />
       <KeyboardWrapper>
         <Keyboard
           onClick={(letter) => {
