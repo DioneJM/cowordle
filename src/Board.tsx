@@ -37,10 +37,11 @@ const Board = ({ guesses, boardState }: BoardProps) => {
   return <BoardWrapper>
     {guesses?.map((guess, index) => {
       const freeCharacters = WORD_LENGTH - guess.length
+      const isLatestGuess = index === guesses.length - 1
       return <Row key={index} isFirst={index === 0}>
         {guess.split('').map((guess, guessIndex) => (
           <Block key={`${index}-${guessIndex}-${guess}`} isFirst={guessIndex === 0}
-                 boardState={boardState}>
+                 boardState={isLatestGuess ? boardState : BoardState.Playing}>
             {guess.toUpperCase()}
           </Block>
         ))}
