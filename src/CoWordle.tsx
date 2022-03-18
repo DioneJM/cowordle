@@ -175,7 +175,7 @@ const CoWordle = () => {
     <Content>
       <Board guesses={guesses} boardState={boardState} wordToGuess={wordToGuess} />
       <ErrorMessage showMessage={gameError === GameError.InvalidGuess}>
-        {'Invalid Guess'}
+        {'Not in word list'}
       </ErrorMessage>
       <KeyboardWrapper>
         <Keyboard
