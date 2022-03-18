@@ -80,7 +80,9 @@ const CoWordle = () => {
   }, [currentGuessAttempt])
 
   useEffect(() => {
-    if (currentGuessAttempt >= MAX_GUESSES || boardStateRef.current === BoardState.Successful || boardStateRef.current === BoardState.Unsuccessful) {
+    if (currentGuessAttempt >= MAX_GUESSES ||
+      boardStateRef.current === BoardState.Successful ||
+      boardStateRef.current === BoardState.Unsuccessful) {
       return
     }
     setGuesses(guesses => {
@@ -116,6 +118,11 @@ const CoWordle = () => {
       boardStateRef.current === BoardState.Unsuccessful) {
       return
     }
+
+    if (!wordsToGuess.includes(currentGuessRef.current)) {
+      return;
+    }
+
     if (currentGuessRef.current === wordToGuess) {
       setBoardState(BoardState.Successful)
       boardStateRef.current = BoardState.Successful
