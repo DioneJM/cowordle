@@ -31,6 +31,24 @@ const KeyboardWrapper = styled.div`
   bottom: 0;
 `
 
+const ErrorMessage = styled.div<{ display: boolean }>`
+  position: absolute;
+  z-index: 1000;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 150px;
+  height: 75px;
+  border: 4px solid darkred;
+  color: white;
+  background-color: red;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  visibility: ${({ display }) => display ? 'visible' : 'hidden'};
+`
+
 const _MS_PER_DAY = 1000 * 60 * 60 * 24
 const cowordleEpochDate: Date = new Date('2022-03-13')
 
@@ -54,9 +72,22 @@ export interface Letter {
   letterState: LetterState
 }
 
+enum GameError {
+  InvalidGuess
+}
+
 const CoWordle = () => {
   const [currentGuessAttempt, setCurrentGuessAttempt] = useState(0)
   const [currentGuess, setCurrentGuess] = useState<string>('')
+  const [gameError, setGameError] = useState<GameError | undefined>(undefined)
+
+  useEffect(() => {
+    if (gameError == undefined) {
+      return
+    }
+
+    setTimeout(() => setGameError(undefined), 600)
+  }, [gameError])
 
   /**
    * These refs are needed as they can be updated from the event listeners from Keyboard
@@ -120,6 +151,7 @@ const CoWordle = () => {
     }
 
     if (!wordsToGuess.includes(currentGuessRef.current)) {
+      setGameError(GameError.InvalidGuess)
       return
     }
 
@@ -142,6 +174,9 @@ const CoWordle = () => {
     <Header />
     <Content>
       <Board guesses={guesses} boardState={boardState} wordToGuess={wordToGuess} />
+      <ErrorMessage display={gameError === GameError.InvalidGuess}>
+        {'Invalid Guess'}
+      </ErrorMessage>
       <KeyboardWrapper>
         <Keyboard
           enteredLetters={enteredLetters}
