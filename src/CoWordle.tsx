@@ -92,10 +92,10 @@ const CoWordle = () => {
     })
   }, [currentGuess])
 
-  const [knownLetters, updateKnownLetters] = useState<Letter[]>([])
+  const [enteredLetters, updateEnteredLetters] = useState<Letter[]>([])
 
   useEffect(() => {
-    const known: Letter[] = guesses
+    const enteredLetters: Letter[] = guesses
       .map((guess) => {
         const letters = guess.split('')
         return letters.map((letter, letterIndex) => {
@@ -104,13 +104,13 @@ const CoWordle = () => {
             letterState: getLetterState(letter, letterIndex, wordToGuess),
           }
         })
-          .filter(letter => letter.letterState !== LetterState.NotPresent && letter.letterState !== LetterState.Blank)
+          .filter(letter => letter.letterState !== LetterState.Blank)
       })
       .reduce((all, current) => [...all, ...current], [])
       .filter((letter, index, knownLetters) => knownLetters.findIndex(l => (l.letter === letter.letter)) === index)
 
-    updateKnownLetters(known)
-  }, [guesses])
+    updateEnteredLetters(enteredLetters)
+  }, [currentGuessAttempt])
 
   const submitGuess = () => {
     if (currentGuessRef.current.length < WORD_LENGTH ||
@@ -120,7 +120,7 @@ const CoWordle = () => {
     }
 
     if (!wordsToGuess.includes(currentGuessRef.current)) {
-      return;
+      return
     }
 
     if (currentGuessRef.current === wordToGuess) {
@@ -144,6 +144,7 @@ const CoWordle = () => {
       <Board guesses={guesses} boardState={boardState} wordToGuess={wordToGuess} />
       <KeyboardWrapper>
         <Keyboard
+          enteredLetters={enteredLetters}
           onClick={(letter) => {
             setCurrentGuess(currentGuess => {
               const newGuess = currentGuess.length < WORD_LENGTH ?
