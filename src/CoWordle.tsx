@@ -31,7 +31,7 @@ const KeyboardWrapper = styled.div`
   bottom: 0;
 `
 
-const ErrorMessage = styled.div<{ display: boolean }>`
+const ErrorMessage = styled.div<{ showMessage: boolean }>`
   position: absolute;
   z-index: 1000;
   top: 50%;
@@ -46,7 +46,7 @@ const ErrorMessage = styled.div<{ display: boolean }>`
   align-items: center;
   justify-content: center;
   border-radius: 12px;
-  visibility: ${({ display }) => display ? 'visible' : 'hidden'};
+  visibility: ${({ showMessage }) => showMessage ? 'visible' : 'hidden'};
 `
 
 const _MS_PER_DAY = 1000 * 60 * 60 * 24
@@ -174,7 +174,7 @@ const CoWordle = () => {
     <Header />
     <Content>
       <Board guesses={guesses} boardState={boardState} wordToGuess={wordToGuess} />
-      <ErrorMessage display={gameError === GameError.InvalidGuess}>
+      <ErrorMessage showMessage={gameError === GameError.InvalidGuess}>
         {'Invalid Guess'}
       </ErrorMessage>
       <KeyboardWrapper>
