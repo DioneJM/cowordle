@@ -14,7 +14,7 @@ const Wrapper = styled.div`
   width: 100vw;
   min-width: 350px;
   min-height: 450px;
-  overflow: auto;
+  overflow: hidden;
 `
 
 const Content = styled.div`
@@ -29,6 +29,13 @@ const Content = styled.div`
 const KeyboardWrapper = styled.div`
   position: fixed;
   bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 500px;
+
+  @media (max-width: 500px) {
+    width: 95vw;
+  }
 `
 
 const ErrorMessage = styled.div<{ showMessage: boolean }>`

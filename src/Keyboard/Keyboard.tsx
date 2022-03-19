@@ -5,6 +5,7 @@ import { Letter } from '../CoWordle'
 import { LetterState } from '../Board'
 
 const KeyboardWrapper = styled.div`
+  margin-right: -8px;
 `
 
 const keyboardLayout = [
@@ -83,19 +84,26 @@ const Keyboard = ({ onClick, onDelete, onSubmit, enteredLetters }: KeyboardProps
 
 const KeyRow = styled.div<{ offsetRow: boolean }>`
   display: flex;
-  justify-content: space-between;
-  padding: 0 ${({ offsetRow }) => offsetRow ? '6%' : 0};
+  justify-content: center;
+  padding: 0 ${({ offsetRow }) => offsetRow ? '1.5rem' : 0};
 `
 
 const Key = styled.button<{ state: LetterState }>`
   border: none;
   background-color: ${({ state }) => getKeyColourFromLetterState(state)};
-  height: 58px;
-  padding: 16px;
+  height: 69px;
+  width: fit-content;
+  flex: 1;
   margin-right: 8px;
   margin-bottom: 8px;
   color: ${({ state }) => state === LetterState.NotPresent ? 'grey' : 'white'};
-  border-radius: 8px;
+  border-radius: 6px;
+  text-align: center;
+
+  @media (max-width: 400px) {
+    height: 50px;
+    font-size: 10px;
+  }
 `
 
 export default Keyboard
