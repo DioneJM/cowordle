@@ -29,7 +29,9 @@ const getKeyColourFromLetterState = (letterState: LetterState) => {
     case LetterState.NotPresent:
       return 'black'
     case LetterState.Correct:
+      return 'rgb(83, 141, 78)'
     case LetterState.InTheWord:
+      return 'rgb(181, 159, 59)'
     default:
       return 'rgb(129, 131, 132)'
   }
