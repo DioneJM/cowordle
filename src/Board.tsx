@@ -72,10 +72,11 @@ const Board = ({ guesses, boardState, wordToGuess }: BoardProps) => {
       return <Row key={index} isFirst={index === 0}>
         {guess.split('').map((letter, guessIndex) => {
           const isFirstOccurrence = guess.indexOf(letter) === guessIndex
+          const highlightDuplicate = isFirstOccurrence || wordToGuess[guessIndex] === letter
           const shouldCalculateLetterState = !isLatestGuess || boardState === BoardState.Successful
           const calculatedState = getLetterState(letter, guessIndex, wordToGuess)
 
-          const letterState = shouldCalculateLetterState && (isGuessCorrect || isFirstOccurrence) ?
+          const letterState = shouldCalculateLetterState && (isGuessCorrect || highlightDuplicate) ?
             calculatedState :
             LetterState.NotPresent
 
