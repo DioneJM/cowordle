@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 import { MAX_GUESSES, WORD_LENGTH } from './CoWordle'
 
 export enum BoardState {
@@ -26,18 +26,6 @@ const BoardWrapper = styled.div`
   flex-direction: column;
   align-items: center;
 `
-
-const getColorFromBoardState = (boardState: BoardState): string => {
-  switch (boardState) {
-    case BoardState.Successful:
-      return 'green'
-    case BoardState.Unsuccessful:
-      return 'red'
-    case BoardState.Playing:
-    default:
-      return 'white'
-  }
-}
 
 export const getLetterState = (letter: string, position: number, wordToGuess: string) => {
   if (wordToGuess[position] === letter) {
@@ -81,6 +69,7 @@ const Board = ({ guesses, boardState, wordToGuess }: BoardProps) => {
             LetterState.NotPresent
 
           return <Block letterState={letterState}
+                        animate={shouldCalculateLetterState}
                         key={`${index}-${guessIndex}-${letter}`}>
             {letter.toUpperCase()}
           </Block>
@@ -114,7 +103,44 @@ const Row = styled.div<{ isFirst: boolean }>`
   user-select: none;
 `
 
-const Block = styled.div<{ letterState: LetterState }>`
+const showAnswerAnimation = (toColor: string) => {
+  return keyframes`
+    0% {
+      background-color: rgb(18, 18, 19);
+    }
+    10% {
+      background-color: rgb(28, 28, 29);
+    }
+    20% {
+      background-color: rgb(38, 38, 39);
+    }
+    30% {
+      background-color: rgb(48, 48, 49);
+    }
+    40% {
+      background-color: rgb(58, 58, 59);
+    }
+    50% {
+      background-color: rgb(68, 68, 69);
+    }
+    60% {
+      background-color: rgb(78, 78, 79);
+    }
+    70% {
+      background-color: rgb(88, 88, 89);
+    }
+    80% {
+      background-color: rgb(108, 108, 109);
+    }
+    90% {
+      background-color: rgb(118, 118, 119);
+    }
+    100% {
+      background-color: ${toColor};
+    }
+  `
+}
+const Block = styled.div<{ letterState: LetterState, animate?: boolean }>`
   min-width: 3rem;
   min-height: 3rem;
   border: 2px solid rgb(58, 58, 60);
@@ -128,6 +154,11 @@ const Block = styled.div<{ letterState: LetterState }>`
   font-weight: 800;
   font-size: 2rem;
   user-select: none;
+  animation-name: ${({
+                       animate,
+                       letterState,
+                     }) => animate ? showAnswerAnimation(getColorForLetterState(letterState)) : ''};
+  animation-duration: ${({ animate }) => animate ? '1.2s' : '0s'};
 
   @media (max-width: 350px) {
     min-width: 2.5rem;
