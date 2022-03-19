@@ -70,6 +70,7 @@ const Board = ({ guesses, boardState, wordToGuess }: BoardProps) => {
 
           return <Block letterState={letterState}
                         animate={shouldCalculateLetterState}
+                        index={guessIndex}
                         key={`${index}-${guessIndex}-${letter}`}>
             {letter.toUpperCase()}
           </Block>
@@ -143,7 +144,7 @@ const showAnswerAnimation = (toColor: string) => {
     }
   `
 }
-const Block = styled.div<{ letterState: LetterState, animate?: boolean }>`
+const Block = styled.div<{ letterState: LetterState, animate?: boolean, index?: number }>`
   min-width: 3rem;
   min-height: 3rem;
   border: 2px solid rgb(58, 58, 60);
@@ -161,7 +162,7 @@ const Block = styled.div<{ letterState: LetterState, animate?: boolean }>`
                        animate,
                        letterState,
                      }) => animate ? showAnswerAnimation(getColorForLetterState(letterState)) : ''};
-  animation-duration: ${({ animate }) => animate ? '1.2s' : '0s'};
+  animation-duration: ${({ animate, index }) => animate ? `${(index != undefined ? index + 1 : 0) * 0.5}s` : '0s'};
 
   @media (max-width: 350px) {
     min-width: 2.5rem;
