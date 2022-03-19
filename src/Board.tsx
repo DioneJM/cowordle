@@ -106,34 +106,37 @@ const Row = styled.div<{ isFirst: boolean }>`
 const showAnswerAnimation = (toColor: string) => {
   return keyframes`
     0% {
-      background-color: rgb(18, 18, 19);
+      background-color: rgb(58, 58, 60);
     }
     10% {
-      background-color: rgb(28, 28, 29);
+      background-color: rgb(68, 68, 70);
     }
     20% {
-      background-color: rgb(38, 38, 39);
+      background-color: rgb(88, 88, 90);
     }
     30% {
-      background-color: rgb(48, 48, 49);
+      background-color: rgb(98, 98, 100);
     }
     40% {
-      background-color: rgb(58, 58, 59);
+      background-color: rgb(108, 108, 110);
     }
     50% {
-      background-color: rgb(68, 68, 69);
+      background-color: rgb(118, 118, 120);
     }
     60% {
-      background-color: rgb(78, 78, 79);
+      background-color: rgb(128, 128, 130);
     }
     70% {
-      background-color: rgb(88, 88, 89);
+      background-color: rgb(138, 138, 140);
     }
     80% {
-      background-color: rgb(108, 108, 109);
+      background-color: rgb(148, 148, 150);
     }
     90% {
-      background-color: rgb(118, 118, 119);
+      background-color: rgb(158, 158, 160);
+    }
+    99% {
+      background-color: rgb(158, 158, 160);
     }
     100% {
       background-color: ${toColor};
