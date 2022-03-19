@@ -3,9 +3,9 @@ import styled from 'styled-components'
 import { MAX_GUESSES, WORD_LENGTH } from './CoWordle'
 
 export enum BoardState {
-  Playing,
-  Successful,
-  Unsuccessful
+  Playing = 'playing',
+  Successful = 'successful',
+  Unsuccessful = 'unsuccessful'
 }
 
 export enum LetterState {
@@ -68,17 +68,22 @@ const Board = ({ guesses, boardState, wordToGuess }: BoardProps) => {
     {guesses?.map((guess, index) => {
       const freeCharacters = WORD_LENGTH - guess.length
       const isLatestGuess = index === guesses.length - 1
+      const isGuessCorrect = guess === wordToGuess
       return <Row key={index} isFirst={index === 0}>
-        {guess.split('').map((letter, guessIndex) => (
-          <Block key={`${index}-${guessIndex}-${letter}`}
-                 letterState={isLatestGuess && boardState !== BoardState.Successful ?
-                   LetterState.NotPresent :
-                   getLetterState(letter, guessIndex, wordToGuess)
-                 }
-          >
+        {guess.split('').map((letter, guessIndex) => {
+          const isFirstOccurrence = guess.indexOf(letter) === guessIndex
+          const shouldCalculateLetterState = !isLatestGuess || boardState === BoardState.Successful
+          const calculatedState = getLetterState(letter, guessIndex, wordToGuess)
+
+          const letterState = shouldCalculateLetterState && (isGuessCorrect || isFirstOccurrence) ?
+            calculatedState :
+            LetterState.NotPresent
+
+          return <Block letterState={letterState}
+                        key={`${index}-${guessIndex}-${letter}`}>
             {letter.toUpperCase()}
           </Block>
-        ))}
+        })}
         {Array.from(Array(freeCharacters).keys()).map((_, freeIndex) => (
           <EmptyBlock key={`${index}_${freeIndex}_guess_empty`}
                       letterState={LetterState.Blank}
