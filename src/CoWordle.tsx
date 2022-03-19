@@ -82,7 +82,7 @@ const getDaysSinceEpochFrom = (date: Date) => dateDiffInDays(cowordleEpochDate, 
 const today = new Date()
 const daysSinceEpoch: number = getDaysSinceEpochFrom(today)
 const circularIndex = (daysSinceEpoch % wordsToGuess.length + wordsToGuess.length) % wordsToGuess.length
-const wordToGuess = 'balls' //wordsToGuess[circularIndex - 1]
+const wordToGuess = wordsToGuess[circularIndex - 1]
 console.log('word to guess: ', wordToGuess)
 
 export interface Letter {
