@@ -55,6 +55,17 @@ const ErrorMessage = styled.div<{ showMessage: boolean }>`
   border-radius: 12px;
   visibility: ${({ showMessage }) => showMessage ? 'visible' : 'hidden'};
 `
+const BoardWrapper = styled.div`
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  @media (max-width: 500px) {
+    width: 100%;
+    max-height: 300px;
+  }
+`
 
 const _MS_PER_DAY = 1000 * 60 * 60 * 24
 const cowordleEpochDate: Date = new Date('2022-03-13')
@@ -180,7 +191,9 @@ const CoWordle = () => {
   return <Wrapper>
     <Header />
     <Content>
-      <Board guesses={guesses} boardState={boardState} wordToGuess={wordToGuess} />
+      <BoardWrapper>
+        <Board guesses={guesses} boardState={boardState} wordToGuess={wordToGuess} />
+      </BoardWrapper>
       <ErrorMessage showMessage={gameError === GameError.InvalidGuess}>
         {'Not in word list'}
       </ErrorMessage>

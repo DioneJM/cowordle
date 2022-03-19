@@ -22,7 +22,6 @@ export interface BoardProps {
 }
 
 const BoardWrapper = styled.div`
-  max-width: 500px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -121,6 +120,12 @@ const Block = styled.div<{ letterState: LetterState }>`
   margin-left: 4px;
   font-weight: 800;
   font-size: 2rem;
+
+  @media (max-width: 350px) {
+    min-width: 2.5rem;
+    min-height: 2.5rem;
+    font-size: 1.5rem;
+  }
 `
 
 const EmptyBlock = styled(Block)``
