@@ -111,6 +111,7 @@ const Row = styled.div<{ isFirst: boolean }>`
   display: flex;
   justify-content: space-between;
   margin-top: ${({ isFirst }) => isFirst ? '0' : '4'}px;
+  user-select: none;
 `
 
 const Block = styled.div<{ letterState: LetterState }>`
@@ -126,6 +127,7 @@ const Block = styled.div<{ letterState: LetterState }>`
   margin-left: 4px;
   font-weight: 800;
   font-size: 2rem;
+  user-select: none;
 
   @media (max-width: 350px) {
     min-width: 2.5rem;

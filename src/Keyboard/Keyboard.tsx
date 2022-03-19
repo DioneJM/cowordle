@@ -86,6 +86,7 @@ const KeyRow = styled.div<{ offsetRow: boolean }>`
   display: flex;
   justify-content: center;
   padding: 0 ${({ offsetRow }) => offsetRow ? '1.5rem' : 0};
+  user-select: none;
 `
 
 const Key = styled.button<{ state: LetterState }>`
@@ -99,6 +100,7 @@ const Key = styled.button<{ state: LetterState }>`
   color: ${({ state }) => state === LetterState.NotPresent ? 'grey' : 'white'};
   border-radius: 6px;
   text-align: center;
+  user-select: none;
 
   @media (max-width: 400px) {
     height: 50px;
