@@ -103,6 +103,7 @@ const Row = styled.div<{ isFirst: boolean }>`
   margin-top: ${({ isFirst }) => isFirst ? '0' : '4'}px;
   user-select: none;
 `
+export const showAnimationLengthInSeconds = 2.5
 
 const showAnswerAnimation = (toColor: string) => {
   return keyframes`
@@ -162,7 +163,10 @@ const Block = styled.div<{ letterState: LetterState, animate?: boolean, index?: 
                        animate,
                        letterState,
                      }) => animate ? showAnswerAnimation(getColorForLetterState(letterState)) : ''};
-  animation-duration: ${({ animate, index }) => animate ? `${(index != undefined ? index + 1 : 0) * 0.5}s` : '0s'};
+  animation-duration: ${({
+                           animate,
+                           index,
+                         }) => animate ? `${(index != undefined ? index + 1 : 0) * showAnimationLengthInSeconds / WORD_LENGTH}s` : '0s'};
 
   @media (max-width: 350px) {
     min-width: 2.5rem;

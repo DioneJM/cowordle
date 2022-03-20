@@ -54,7 +54,7 @@ const Keyboard = ({ onClick, onDelete, onSubmit, enteredLetters }: KeyboardProps
   }, 1)
 
   useEffect(() => {
-    document.addEventListener('keydown', (event) => processKeyDown(event))
+    document.addEventListener('keydown', processKeyDown)
 
     return () => {
       document.removeEventListener('keydown', processKeyDown)

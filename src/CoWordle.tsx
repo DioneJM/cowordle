@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Header from './Header'
-import Board, { BoardState, getLetterState, LetterState } from './Board'
+import Board, { BoardState, getLetterState, LetterState, showAnimationLengthInSeconds } from './Board'
 import Keyboard from './Keyboard/Keyboard'
 import styled from 'styled-components'
 import { wordsToGuess } from './words/wordsToGuess'
@@ -158,7 +158,7 @@ const CoWordle = () => {
       .reduce((all, current) => [...all, ...current], [])
       .filter((letter, index, knownLetters) => knownLetters.findIndex(l => (l.letter === letter.letter)) === index)
 
-    updateEnteredLetters(enteredLetters)
+    setTimeout(() => updateEnteredLetters(enteredLetters), showAnimationLengthInSeconds * 1000)
   }, [currentGuessAttempt])
 
   const submitGuess = () => {
