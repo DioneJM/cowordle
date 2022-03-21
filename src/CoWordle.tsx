@@ -127,7 +127,7 @@ const CoWordle = () => {
       return
     }
     const savedState = JSON.parse(localState)
-    const daysSinceSaved = dateDiffInDays(new Date(), new Date(savedState.savedOn))
+    const daysSinceSaved = dateDiffInDays(new Date(savedState.savedOn), new Date())
     if (isNaN(daysSinceSaved) || daysSinceSaved >= 1) {
       saveState({
         savedOn: new Date(),
