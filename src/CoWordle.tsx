@@ -127,6 +127,13 @@ const CoWordle = () => {
       return
     }
     const savedState = JSON.parse(localState)
+    const daysSinceSaved = dateDiffInDays(new Date(), new Date(savedState.savedOn))
+    if (isNaN(daysSinceSaved) || daysSinceSaved >= 1) {
+      saveState({
+        savedOn: new Date(),
+      })
+      return
+    }
     setGuesses(savedState?.guesses ?? [])
     setCurrentGuessAttempt(savedState?.currentGuessAttempt ?? 0)
     currentGuessAttemptRef.current = savedState?.currentGuessAttempt ?? 0
@@ -182,10 +189,14 @@ const CoWordle = () => {
 
   useEffect(() => {
     setState((state) => {
+      const savedGuesses = guesses.filter(guess => !!guess)
+      // this needs to be added since we're saving the current state and emulating a new empty guess
+      savedGuesses.push('')
       return Object.assign(state, {
-        guesses: guesses.filter(guess => !!guess),
+        guesses: savedGuesses,
         currentGuessAttempt: currentGuessAttemptRef.current + 1,
         boardState: boardState,
+        savedOn: new Date(),
       })
     })
   }, [guesses, boardStateRef, boardState])
