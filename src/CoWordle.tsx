@@ -98,6 +98,7 @@ const CoWordle = () => {
   const [currentGuessAttempt, setCurrentGuessAttempt] = useState(0)
   const [currentGuess, setCurrentGuess] = useState<string>('')
   const [gameError, setGameError] = useState<GameError | undefined>(undefined)
+  const [stateInitialised, setStateInitialised] = useState(false)
 
   useEffect(() => {
     if (gameError == undefined) {
@@ -119,6 +120,20 @@ const CoWordle = () => {
   const [boardState, setBoardState] = useState<BoardState>(BoardState.Playing)
 
   useEffect(() => {
+    const localState = localStorage.getItem('state')
+    setStateInitialised(true)
+    if (!localState) {
+      console.log('no saved state found')
+      return
+    }
+    const savedState = JSON.parse(localState)
+    setGuesses(savedState?.guesses ?? [])
+    setCurrentGuessAttempt(savedState?.currentGuessAttempt ?? 0)
+    currentGuessAttemptRef.current = savedState?.currentGuessAttempt ?? 0
+    boardStateRef.current = savedState.boardState ?? BoardState.Playing
+  }, [])
+
+  useEffect(() => {
     if (currentGuessAttemptRef.current === MAX_GUESSES && currentGuessRef.current !== wordToGuess) {
       setBoardState(BoardState.Unsuccessful)
       boardStateRef.current = BoardState.Unsuccessful
@@ -129,9 +144,11 @@ const CoWordle = () => {
   }, [currentGuessAttempt])
 
   useEffect(() => {
+    const shouldIgnoreEmptyGuess = currentGuess == '' && !stateInitialised
     if (currentGuessAttempt >= MAX_GUESSES ||
       boardStateRef.current === BoardState.Successful ||
-      boardStateRef.current === BoardState.Unsuccessful) {
+      boardStateRef.current === BoardState.Unsuccessful ||
+      shouldIgnoreEmptyGuess) {
       return
     }
     setGuesses(guesses => {
@@ -161,6 +178,22 @@ const CoWordle = () => {
     setTimeout(() => updateEnteredLetters(enteredLetters), showAnimationLengthInSeconds * 1000)
   }, [currentGuessAttempt])
 
+  const [state, setState] = useState({})
+
+  useEffect(() => {
+    setState((state) => {
+      return Object.assign(state, {
+        guesses: guesses.filter(guess => !!guess),
+        currentGuessAttempt: currentGuessAttemptRef.current + 1,
+        boardState: boardState,
+      })
+    })
+  }, [guesses, boardStateRef, boardState])
+
+  const saveState = (state: any) => {
+    localStorage.setItem('state', JSON.stringify(state))
+  }
+
   const submitGuess = () => {
     if (currentGuessRef.current.length < WORD_LENGTH ||
       boardStateRef.current === BoardState.Successful ||
@@ -185,6 +218,8 @@ const CoWordle = () => {
       currentGuessAttemptRef.current = nextGuessAttempt
       return nextGuessAttempt
     })
+
+    saveState(state)
   }
 
 
