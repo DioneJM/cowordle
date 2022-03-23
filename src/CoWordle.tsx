@@ -191,7 +191,9 @@ const CoWordle = () => {
     setState((state) => {
       const savedGuesses = guesses.filter(guess => !!guess)
       // this needs to be added since we're saving the current state and emulating a new empty guess
-      savedGuesses.push('')
+      if (savedGuesses.length + 1 <= MAX_GUESSES) {
+        savedGuesses.push('')
+      }
       return Object.assign(state, {
         guesses: savedGuesses,
         currentGuessAttempt: currentGuessAttemptRef.current + 1,
