@@ -57,7 +57,7 @@ const Board = ({ guesses, boardState, wordToGuess }: BoardProps) => {
       const freeCharacters = WORD_LENGTH - guess.length
       const isLatestGuess = index === guesses.length - 1
       const isGuessCorrect = guess === wordToGuess
-      return <Row key={index} isFirst={index === 0}>
+      return <Row key={index}>
         {guess.split('').map((letter, guessIndex) => {
           const isFirstOccurrence = guess.indexOf(letter) === guessIndex
           const highlightDuplicate = isFirstOccurrence || wordToGuess[guessIndex] === letter
@@ -84,7 +84,7 @@ const Board = ({ guesses, boardState, wordToGuess }: BoardProps) => {
       </Row>
     })}
     {Array.from(Array(guessesRemaining).keys()).map((_, index) => {
-      return <Row key={index} isFirst={guesses.length === 0}>
+      return <Row key={index}>
         {Array.from(Array(WORD_LENGTH).keys()).map((guess, index) => (
           <EmptyBlock key={`${index}_empty`}
                       letterState={LetterState.Blank}
@@ -97,10 +97,10 @@ const Board = ({ guesses, boardState, wordToGuess }: BoardProps) => {
   </BoardWrapper>
 }
 
-const Row = styled.div<{ isFirst: boolean }>`
+const Row = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-top: ${({ isFirst }) => isFirst ? '0' : '4'}px;
+  margin-top: 4px;
   user-select: none;
 `
 export const showAnimationLengthInSeconds = 2.5
