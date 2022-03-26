@@ -1,6 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Header from './Header'
-import Board, { BoardState, getLetterState, LetterState, showAnimationLengthInSeconds } from './Board'
+import Board, {
+  BoardState,
+  getLetterState,
+  LetterState,
+  showAnimationLengthInMs,
+  showAnimationLengthInSeconds,
+} from './Board'
 import Keyboard from './Keyboard/Keyboard'
 import styled from 'styled-components'
 import { wordsToGuess } from './words/wordsToGuess'
@@ -202,6 +208,12 @@ const CoWordle = () => {
       })
     })
   }, [guesses, boardStateRef, boardState])
+
+  useEffect(() => {
+    if (boardStateRef.current === BoardState.Successful && stateInitialised) {
+      setTimeout(() => console.log('comepleted!'), showAnimationLengthInMs)
+    }
+  }, [boardState, boardStateRef])
 
   const saveState = (state: any) => {
     localStorage.setItem('state', JSON.stringify(state))

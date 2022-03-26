@@ -104,6 +104,7 @@ const Row = styled.div`
   user-select: none;
 `
 export const showAnimationLengthInSeconds = 2.5
+export const showAnimationLengthInMs = showAnimationLengthInSeconds * 1000
 
 const showAnswerAnimation = (toColor: string) => {
   return keyframes`
