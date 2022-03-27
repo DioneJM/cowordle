@@ -275,7 +275,7 @@ const CoWordle = () => {
 
 
   return <Wrapper>
-    <Header onShare={() => boardStateRef.current === BoardState.Successful && setShowStatisticsModal(true)} />
+    <Header onShare={() => setShowStatisticsModal(true)} />
     <Content>
       <BoardWrapper onClick={copyBoardStateToClipboard}>
         <Button style={{

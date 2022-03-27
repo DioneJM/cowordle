@@ -24,7 +24,8 @@ const Header = ({ onShare }: HeaderProps) => {
     <Title>
       🤝 CoWordle 🤝
     </Title>
-    <Button onClick={onShare} colorScheme={'blackAlpha'}>Share</Button>
+    <Button style={{ position: 'absolute', right: 16, top: 14 }} onClick={onShare} backgroundColor={'rgb(18, 18, 19)'}
+            colorScheme={'blackAlpha'}>🔗</Button>
   </Container>
 }
 
