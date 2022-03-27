@@ -107,6 +107,7 @@ const Key = styled.button<{ state: LetterState }>`
   @media (max-width: 400px) {
     height: 60px;
     font-size: 10px;
+    margin-right: 4px;
   }
 `
 
