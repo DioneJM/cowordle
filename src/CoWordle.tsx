@@ -213,7 +213,7 @@ const CoWordle = () => {
   }, [guesses, boardStateRef, boardState])
 
   useEffect(() => {
-    if (boardStateRef.current === BoardState.Successful && stateInitialised) {
+    if (boardStateRef.current === BoardState.Successful) {
       setTimeout(() => setShowStatisticsModal(true), showAnimationLengthInMs)
     }
   }, [boardState, boardStateRef])
