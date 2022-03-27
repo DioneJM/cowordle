@@ -65,6 +65,7 @@ export const getEmojiForLetterState = (letterState: LetterState) => {
 
 const Board = ({ guesses, boardState, wordToGuess }: BoardProps) => {
   const guessesRemaining = MAX_GUESSES - guesses?.length ?? MAX_GUESSES
+  const gameHasEnded = boardState === BoardState.Successful || boardState === BoardState.Unsuccessful
   return <BoardWrapper>
     {guesses?.map((guess, index) => {
       const freeCharacters = WORD_LENGTH - guess.length
@@ -74,7 +75,7 @@ const Board = ({ guesses, boardState, wordToGuess }: BoardProps) => {
         {guess.split('').map((letter, guessIndex) => {
           const isFirstOccurrence = guess.indexOf(letter) === guessIndex
           const highlightDuplicate = isFirstOccurrence || wordToGuess[guessIndex] === letter
-          const shouldCalculateLetterState = !isLatestGuess || boardState === BoardState.Successful
+          const shouldCalculateLetterState = !isLatestGuess || gameHasEnded
           const calculatedState = getLetterState(letter, guessIndex, wordToGuess)
 
           const letterState = shouldCalculateLetterState && (isGuessCorrect || highlightDuplicate) ?
