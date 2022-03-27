@@ -10,6 +10,7 @@ import Board, {
 import Keyboard from './Keyboard/Keyboard'
 import styled from 'styled-components'
 import { wordsToGuess } from './words/wordsToGuess'
+import StatisticsModal from './StatisticsModal'
 
 export const MAX_GUESSES = 6
 export const WORD_LENGTH = 5
@@ -105,6 +106,7 @@ const CoWordle = () => {
   const [currentGuess, setCurrentGuess] = useState<string>('')
   const [gameError, setGameError] = useState<GameError | undefined>(undefined)
   const [stateInitialised, setStateInitialised] = useState(false)
+  const [showStatisticsModal, setShowStatisticsModal] = useState(false)
 
   useEffect(() => {
     if (gameError == undefined) {
@@ -211,9 +213,11 @@ const CoWordle = () => {
 
   useEffect(() => {
     if (boardStateRef.current === BoardState.Successful && stateInitialised) {
-      setTimeout(() => console.log('comepleted!'), showAnimationLengthInMs)
+      setTimeout(() => setShowStatisticsModal(true), showAnimationLengthInMs)
     }
   }, [boardState, boardStateRef])
+
+  const onClose = () => setShowStatisticsModal(false)
 
   const saveState = (state: any) => {
     localStorage.setItem('state', JSON.stringify(state))
@@ -249,7 +253,7 @@ const CoWordle = () => {
 
 
   return <Wrapper>
-    <Header />
+    <Header onShare={() => setShowStatisticsModal(true)} />
     <Content>
       <BoardWrapper>
         <Board guesses={guesses} boardState={boardState} wordToGuess={wordToGuess} />
@@ -277,6 +281,7 @@ const CoWordle = () => {
           onSubmit={submitGuess} />
       </KeyboardWrapper>
     </Content>
+    <StatisticsModal onClose={onClose} display={showStatisticsModal} />
   </Wrapper>
 }
 
