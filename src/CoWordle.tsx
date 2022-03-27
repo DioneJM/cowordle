@@ -127,7 +127,6 @@ const CoWordle = () => {
   const boardStateRef = useRef<BoardState>(BoardState.Playing)
 
   const [guesses, setGuesses] = useState<string[]>([])
-  const [boardState, setBoardState] = useState<BoardState>(BoardState.Playing)
 
   useEffect(() => {
     const localState = localStorage.getItem('state')
@@ -152,7 +151,6 @@ const CoWordle = () => {
 
   useEffect(() => {
     if (currentGuessAttemptRef.current === MAX_GUESSES && currentGuessRef.current !== wordToGuess) {
-      setBoardState(BoardState.Unsuccessful)
       boardStateRef.current = BoardState.Unsuccessful
       return
     }
@@ -207,17 +205,17 @@ const CoWordle = () => {
       return Object.assign(state, {
         guesses: savedGuesses,
         currentGuessAttempt: currentGuessAttemptRef.current + 1,
-        boardState: boardState,
+        boardState: boardStateRef.current,
         savedOn: new Date(),
       })
     })
-  }, [guesses, boardStateRef, boardState])
+  }, [guesses, boardStateRef])
 
   useEffect(() => {
-    if (boardStateRef.current === BoardState.Successful) {
+    if (boardStateRef.current === BoardState.Successful || boardStateRef.current === BoardState.Unsuccessful) {
       setTimeout(() => setShowStatisticsModal(true), showAnimationLengthInMs)
     }
-  }, [boardState, boardStateRef])
+  }, [boardStateRef])
 
   const onClose = () => setShowStatisticsModal(false)
 
@@ -238,7 +236,6 @@ const CoWordle = () => {
     }
 
     if (currentGuessRef.current === wordToGuess) {
-      setBoardState(BoardState.Successful)
       boardStateRef.current = BoardState.Successful
     }
     setCurrentGuessAttempt(currentGuessAttempt => {
@@ -279,7 +276,7 @@ const CoWordle = () => {
           background: 'transparent',
           padding: '8px',
         }}>
-          <Board guesses={guesses} boardState={boardState} wordToGuess={wordToGuess} />
+          <Board guesses={guesses} boardState={boardStateRef.current} wordToGuess={wordToGuess} />
         </Button>
       </BoardWrapper>
       <ErrorMessage showMessage={gameError === GameError.InvalidGuess}>
