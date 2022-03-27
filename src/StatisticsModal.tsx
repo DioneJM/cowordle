@@ -8,11 +8,10 @@ import {
   ModalHeader,
   ModalOverlay,
   Popover,
-  PopoverBody,
-  PopoverContent,
   PopoverTrigger,
 } from '@chakra-ui/react'
 import React from 'react'
+import useWindowDimensions from './useWindowDimensions'
 
 export interface StatisticsModalProps {
   onShare: () => void;
@@ -21,8 +20,10 @@ export interface StatisticsModalProps {
 }
 
 const StatisticsModal = ({ onShare, onClose, display }: StatisticsModalProps) => {
+  const { width } = useWindowDimensions()
   return <>
     <Modal
+      size={width <= 400 ? 'xs' : 'md'}
       isCentered
       onClose={onClose}
       isOpen={display}
@@ -48,18 +49,14 @@ export interface SharePopoverProps {
 }
 
 const SharePopover = ({ onShare }: SharePopoverProps) => {
-  return <Popover>
-    <PopoverTrigger>
-      <Button colorScheme={'green'} onClick={onShare}>Share</Button>
-    </PopoverTrigger>
-    <PopoverContent backgroundColor={'rgb(18, 18, 19)'}
-                    color={'white'}
-                    width={'fit-content'}
-                    border={'none'}>
-      <PopoverBody>
-        Copied to clipboard!
-      </PopoverBody>
-    </PopoverContent>
+  return <Popover closeOnBlur>
+    {({ isOpen }) => (
+      <>
+        <PopoverTrigger>
+          <Button colorScheme={'green'} onClick={onShare}>{isOpen ? 'Copied!' : 'Share'}</Button>
+        </PopoverTrigger>
+      </>
+    )}
   </Popover>
 }
 
