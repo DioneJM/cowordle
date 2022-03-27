@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { Button } from '@chakra-ui/react'
 
 const Container = styled.div`
-  border: 1px solid rgb(58, 58, 60);
+  border-bottom: 1px solid rgb(58, 58, 60);
   color: white;
   display: flex;
   padding: 8px;
