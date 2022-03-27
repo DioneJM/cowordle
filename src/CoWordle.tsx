@@ -9,7 +9,7 @@ import Board, {
   showAnimationLengthInSeconds,
 } from './Board'
 import Keyboard from './Keyboard/Keyboard'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { wordsToGuess } from './words/wordsToGuess'
 import StatisticsModal from './StatisticsModal'
 import { Button } from '@chakra-ui/react'
@@ -47,7 +47,7 @@ const KeyboardWrapper = styled.div`
   }
 `
 
-const ErrorMessage = styled.div<{ showMessage: boolean }>`
+const Message = styled.div<{ showMessage: boolean, isError?: boolean }>`
   position: absolute;
   z-index: 1000;
   top: 50%;
@@ -55,14 +55,21 @@ const ErrorMessage = styled.div<{ showMessage: boolean }>`
   transform: translateX(-50%);
   width: 150px;
   height: 75px;
-  border: 4px solid darkred;
-  color: white;
-  background-color: red;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 12px;
   visibility: ${({ showMessage }) => showMessage ? 'visible' : 'hidden'};
+  border: 2px solid white;
+  color: white;
+  background-color: rgb(18, 18, 19);
+  font-weight: 800;
+  ${({ isError }) => {
+    return isError ? css`
+      border: 2px solid darkred;
+      color: darkred;
+    ` : ''
+  }}
 `
 const BoardWrapper = styled.div`
   max-width: 500px;
@@ -212,7 +219,7 @@ const CoWordle = () => {
   }, [guesses, boardStateRef])
 
   useEffect(() => {
-    if (boardStateRef.current === BoardState.Successful || boardStateRef.current === BoardState.Unsuccessful) {
+    if (boardStateRef.current === BoardState.Successful) {
       setTimeout(() => setShowStatisticsModal(true), showAnimationLengthInMs)
     }
   }, [boardStateRef])
@@ -226,7 +233,8 @@ const CoWordle = () => {
   const submitGuess = () => {
     if (currentGuessRef.current.length < WORD_LENGTH ||
       boardStateRef.current === BoardState.Successful ||
-      boardStateRef.current === BoardState.Unsuccessful) {
+      boardStateRef.current === BoardState.Unsuccessful ||
+      currentGuessAttemptRef.current > MAX_GUESSES) {
       return
     }
 
@@ -279,9 +287,12 @@ const CoWordle = () => {
           <Board guesses={guesses} boardState={boardStateRef.current} wordToGuess={wordToGuess} />
         </Button>
       </BoardWrapper>
-      <ErrorMessage showMessage={gameError === GameError.InvalidGuess}>
+      <Message isError showMessage={gameError === GameError.InvalidGuess}>
         {'Not in word list'}
-      </ErrorMessage>
+      </Message>
+      <Message showMessage={boardStateRef.current === BoardState.Unsuccessful}>
+        {wordToGuess.toUpperCase()}
+      </Message>
       <KeyboardWrapper>
         <Keyboard
           enteredLetters={enteredLetters}
