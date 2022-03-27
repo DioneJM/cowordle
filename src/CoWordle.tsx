@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import Header from './Header'
 import Board, {
   BoardState,
+  getEmojiForLetterState,
   getLetterState,
   LetterState,
   showAnimationLengthInMs,
@@ -251,9 +252,21 @@ const CoWordle = () => {
     saveState(state)
   }
 
+  const copyBoardStateToClipboard = () => {
+    const guessesBlocks: string[] = guesses.filter(guess => !!guess)
+      .map(guess => guess.split('')
+        .map((letter, index) => getLetterState(letter, index, wordToGuess))
+        .map((letterState) => getEmojiForLetterState(letterState))
+        .join(''),
+      )
+    const textToShare = `CoWordle ${daysSinceEpoch} ${guessesBlocks.length}/${MAX_GUESSES}\n${guessesBlocks.join('\n')}`
+
+    navigator.clipboard.writeText(textToShare)
+  }
+
 
   return <Wrapper>
-    <Header onShare={() => setShowStatisticsModal(true)} />
+    <Header onShare={() => boardStateRef.current === BoardState.Successful && setShowStatisticsModal(true)} />
     <Content>
       <BoardWrapper>
         <Board guesses={guesses} boardState={boardState} wordToGuess={wordToGuess} />
@@ -281,7 +294,9 @@ const CoWordle = () => {
           onSubmit={submitGuess} />
       </KeyboardWrapper>
     </Content>
-    <StatisticsModal onClose={onClose} display={showStatisticsModal} />
+    <StatisticsModal onClose={onClose}
+                     onShare={copyBoardStateToClipboard}
+                     display={showStatisticsModal} />
   </Wrapper>
 }
 

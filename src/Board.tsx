@@ -27,7 +27,7 @@ const BoardWrapper = styled.div`
   align-items: center;
 `
 
-export const getLetterState = (letter: string, position: number, wordToGuess: string) => {
+export const getLetterState = (letter: string, position: number, wordToGuess: string): LetterState => {
   if (wordToGuess[position] === letter) {
     return LetterState.Correct
   } else if (wordToGuess.includes(letter)) {
@@ -49,6 +49,19 @@ const getColorForLetterState = (letterState: LetterState) => {
       return 'rgb(18, 18, 19)'
   }
 }
+
+export const getEmojiForLetterState = (letterState: LetterState) => {
+  switch (letterState) {
+    case LetterState.Correct:
+      return '🟩'
+    case LetterState.InTheWord:
+      return '🟨'
+    case LetterState.NotPresent:
+    default:
+      return '⬛️'
+  }
+}
+
 
 const Board = ({ guesses, boardState, wordToGuess }: BoardProps) => {
   const guessesRemaining = MAX_GUESSES - guesses?.length ?? MAX_GUESSES
