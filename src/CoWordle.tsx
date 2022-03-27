@@ -12,6 +12,7 @@ import Keyboard from './Keyboard/Keyboard'
 import styled from 'styled-components'
 import { wordsToGuess } from './words/wordsToGuess'
 import StatisticsModal from './StatisticsModal'
+import { Button } from '@chakra-ui/react'
 
 export const MAX_GUESSES = 6
 export const WORD_LENGTH = 5
@@ -259,7 +260,10 @@ const CoWordle = () => {
         .map((letterState) => getEmojiForLetterState(letterState))
         .join(''),
       )
-    const textToShare = `CoWordle ${daysSinceEpoch} ${guessesBlocks.length}/${MAX_GUESSES}\n${guessesBlocks.join('\n')}`
+    const progress = boardStateRef.current === BoardState.Successful ? `${guessesBlocks.length}/${MAX_GUESSES}` :
+      boardStateRef.current === BoardState.Unsuccessful ? `❌/${MAX_GUESSES}` : `🚧/${MAX_GUESSES}`
+
+    const textToShare = `CoWordle ${daysSinceEpoch} ${progress}\n${guessesBlocks.join('\n')}`
 
     navigator.clipboard.writeText(textToShare)
   }
@@ -268,8 +272,15 @@ const CoWordle = () => {
   return <Wrapper>
     <Header onShare={() => boardStateRef.current === BoardState.Successful && setShowStatisticsModal(true)} />
     <Content>
-      <BoardWrapper>
-        <Board guesses={guesses} boardState={boardState} wordToGuess={wordToGuess} />
+      <BoardWrapper onClick={copyBoardStateToClipboard}>
+        <Button style={{
+          width: 'fit-content',
+          height: 'fit-content',
+          background: 'transparent',
+          padding: '8px',
+        }}>
+          <Board guesses={guesses} boardState={boardState} wordToGuess={wordToGuess} />
+        </Button>
       </BoardWrapper>
       <ErrorMessage showMessage={gameError === GameError.InvalidGuess}>
         {'Not in word list'}
