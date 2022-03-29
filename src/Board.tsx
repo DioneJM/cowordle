@@ -1,6 +1,6 @@
 import React from 'react'
 import styled, { keyframes } from 'styled-components'
-import { MAX_GUESSES, WORD_LENGTH } from './CoWordle'
+import { MAX_GUESSES, WORD_LENGTH } from './Dwordle'
 
 export enum BoardState {
   Playing = 'playing',

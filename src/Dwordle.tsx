@@ -84,7 +84,7 @@ const BoardWrapper = styled.div`
 `
 
 const _MS_PER_DAY = 1000 * 60 * 60 * 24
-const cowordleEpochDate: Date = new Date('2022-03-13')
+const DwordleEpochDate: Date = new Date('2022-03-13')
 
 const dateDiffInDays = (date1: Date, date2: Date): number => {
   // Discard the time and time-zone information.
@@ -94,7 +94,7 @@ const dateDiffInDays = (date1: Date, date2: Date): number => {
   return Math.floor((utc2 - utc1) / _MS_PER_DAY)
 }
 
-const getDaysSinceEpochFrom = (date: Date) => dateDiffInDays(cowordleEpochDate, date)
+const getDaysSinceEpochFrom = (date: Date) => dateDiffInDays(DwordleEpochDate, date)
 const today = new Date()
 const daysSinceEpoch: number = getDaysSinceEpochFrom(today)
 const circularIndex = (daysSinceEpoch % wordsToGuess.length + wordsToGuess.length) % wordsToGuess.length
@@ -110,7 +110,7 @@ enum GameError {
   InvalidGuess
 }
 
-const CoWordle = () => {
+const Dwordle = () => {
   const [currentGuessAttempt, setCurrentGuessAttempt] = useState(0)
   const [currentGuess, setCurrentGuess] = useState<string>('')
   const [gameError, setGameError] = useState<GameError | undefined>(undefined)
@@ -271,7 +271,7 @@ const CoWordle = () => {
     const progress = boardStateRef.current === BoardState.Successful ? `${guessesBlocks.length}/${MAX_GUESSES}` :
       boardStateRef.current === BoardState.Unsuccessful ? `❌/${MAX_GUESSES}` : `🚧/${MAX_GUESSES}`
 
-    const textToShare = `CoWordle ${daysSinceEpoch} ${progress}\n${guessesBlocks.join('\n')}`
+    const textToShare = `Dwordle ${daysSinceEpoch} ${progress}\n${guessesBlocks.join('\n')}`
 
     navigator.clipboard.writeText(textToShare)
   }
@@ -322,4 +322,4 @@ const CoWordle = () => {
   </Wrapper>
 }
 
-export default CoWordle
+export default Dwordle

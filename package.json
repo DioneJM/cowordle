@@ -1,5 +1,5 @@
 {
-  "name": "cowordle",
+  "name": "Dwordle",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -27,7 +27,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "upload": "aws s3 sync build/ s3://cowordle",
+    "upload": "aws s3 sync build/ s3://Dwordle",
     "deploy": "yarn build && yarn upload"
   },
   "eslintConfig": {

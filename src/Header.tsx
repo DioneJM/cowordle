@@ -22,7 +22,7 @@ export interface HeaderProps {
 const Header = ({ onShare }: HeaderProps) => {
   return <Container>
     <Title>
-      🤝 CoWordle 🤝
+      Dwordle
     </Title>
     <Button style={{ position: 'absolute', right: 16, top: 14 }} onClick={onShare} backgroundColor={'rgb(18, 18, 19)'}
             colorScheme={'blackAlpha'}>🔗</Button>

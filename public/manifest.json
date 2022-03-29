@@ -1,6 +1,6 @@
 {
-  "short_name": "CoWordle",
-  "name": "CoWordle",
+  "short_name": "Dwordle",
+  "name": "Dwordle",
   "icons": [],
   "start_url": ".",
   "display": "standalone",

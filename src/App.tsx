@@ -1,12 +1,12 @@
 import React from 'react'
 import './App.css'
-import CoWordle from './CoWordle'
+import Dwordle from './Dwordle'
 import { ChakraProvider } from '@chakra-ui/react'
 
 function App() {
   return (
     <ChakraProvider>
-      <CoWordle />
+      <Dwordle />
     </ChakraProvider>
   )
 }
