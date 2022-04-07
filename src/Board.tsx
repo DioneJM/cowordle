@@ -9,10 +9,10 @@ export enum BoardState {
 }
 
 export enum LetterState {
-  NotPresent,
-  InTheWord,
-  Correct,
-  Blank
+  NotPresent = 'not_present',
+  InTheWord = 'in_the_word',
+  Correct = 'correct',
+  Blank = 'blank'
 }
 
 export interface BoardProps {

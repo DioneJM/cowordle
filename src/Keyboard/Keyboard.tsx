@@ -63,22 +63,24 @@ const Keyboard = ({ onClick, onDelete, onSubmit, enteredLetters }: KeyboardProps
   return <KeyboardWrapper>
     {keyboardLayout.map((row, index) => (
       <KeyRow key={index} offsetRow={index === 1}>
-        {row.map((key) => (
-          <Key key={key}
-               state={enteredLetters.find(letter => letter.letter === key)?.letterState ?? LetterState.Blank}
-               onClick={() => {
-                 const keyValue = key.toLowerCase()
-                 if (keyValue === 'enter') {
-                   onSubmit()
-                 } else if (keyValue === 'delete') {
-                   onDelete()
-                 } else {
-                   onClick(keyValue)
-                 }
-               }}>
+        {row.map((key) => {
+          const highestState = enteredLetters.find(letter => letter.letter === key && letter.letterState === LetterState.Correct)?.letterState ??
+            enteredLetters.find(letter => letter.letter === key)?.letterState ?? LetterState.Blank
+          return <Key key={key}
+                      state={highestState}
+                      onClick={() => {
+                        const keyValue = key.toLowerCase()
+                        if (keyValue === 'enter') {
+                          onSubmit()
+                        } else if (keyValue === 'delete') {
+                          onDelete()
+                        } else {
+                          onClick(keyValue)
+                        }
+                      }}>
             {key.toUpperCase()}
           </Key>
-        ))}
+        })}
       </KeyRow>
     ))}
   </KeyboardWrapper>

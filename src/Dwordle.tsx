@@ -197,7 +197,9 @@ const Dwordle = () => {
           .filter(letter => letter.letterState !== LetterState.Blank)
       })
       .reduce((all, current) => [...all, ...current], [])
-      .filter((letter, index, knownLetters) => knownLetters.findIndex(l => (l.letter === letter.letter)) === index)
+      .filter((letter, index, knownLetters) => {
+        return knownLetters.findIndex(l => (l.letter === letter.letter && l.letterState === letter.letterState)) === index
+      })
 
     setTimeout(() => updateEnteredLetters(enteredLetters), showAnimationLengthInSeconds * 1000)
   }, [currentGuessAttempt])
